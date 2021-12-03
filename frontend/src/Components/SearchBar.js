@@ -8,6 +8,8 @@ export class SearchBar extends React.Component {
 
     state = {
         reRender: [1,2,3,4,5],
+        placeholder: "Enter Paper Title",
+        wordEntered: '',
         paper: [
             {id: 1,
             title: "Title",
@@ -80,6 +82,65 @@ export class SearchBar extends React.Component {
                 </div>
               
                 <hr class="row brc-default-l1 mx-n1 mb-4" />
+
+
+                
+				<div className="search input-group container m-5" >
+					<div className="searchInputs form-outline input-group">
+						<input
+							className="form-control-lg"
+							style={{ width: '400px' }}
+							type="text"
+							placeholder={this.state.placeholder}
+							value={this.state.wordEntered}
+							/*onChange={(e) => this.handleFilter(e)}*/
+						/>
+						<div className="searchIcon btn-primary float btn-lg btn fas fa-search">
+						
+                            <SearchIcon />
+						</div>
+						
+					</div>
+
+
+
+
+					<label for="membership" className="mt-4 me-2"><span>Search by:</span></label>
+					<div>
+						<select className="form-select form-control mt-3" name="membership" id="membership" /*onChange={(e) => this.changeFilter(e)}*/>
+							<option
+								value="recipeFilter"
+							>Paper Title</option>
+							<option
+								value="authorFilter"
+							>Author Title</option>
+						</select>
+
+					</div>
+				</div>
+				<hr />
+				<div>
+
+					
+				</div>
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <div class="mt-4">
                     <div class="row text-600 text-white bgc-default-tp1 py-25">
