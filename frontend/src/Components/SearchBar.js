@@ -4,6 +4,52 @@ import './SearchBar.css'
 import CloseIcon from "@material-ui/icons/Close";
 
 export class SearchBar extends React.Component {
+
+
+    state = {
+        reRender: [1,2,3,4,5],
+        paper: [
+            {id: 1,
+            title: "Title",
+            authors: ["Bob", "John", "Jake"],
+            url: "",
+            journal: false,
+            pageNumber: 15,
+            year: "",
+            journalNumber: ""}
+        ]
+    }
+
+
+    renderList(){
+        return <>
+				<div className="dataResult">
+					{this.state.paper.map((paper) => {
+						return <>
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{paper.id}</div>
+                                <div class="col-9 col-sm-5">{paper.title}</div>
+                                <div class="d-none d-sm-block col-2">
+                                    {
+                                        paper.authors.map((name) => {
+                                            return<>
+                                                <a>
+                                                    {name+ ", "}
+                                                </a>
+                                            </>
+                                        })            
+                                    }
+                                </div>
+                                <div class="d-none d-sm-block col-2 text-95">{paper.journal}</div>
+                                <div class="col-2 text-secondary-d2">{paper.pageNumber}</div>
+                            </div>
+                        </>
+					})}
+				</div>
+			</>
+
+    }
+
     render () {
         return <>
         
@@ -29,34 +75,23 @@ export class SearchBar extends React.Component {
             <div class="col-12 col-lg-10 offset-lg-1">
                 <div class="row">
                         <div class="text-center text-150">
-                        
                             <span class="text-default-d3">Search for Papers</span>
                         </div>
                 </div>
               
-
                 <hr class="row brc-default-l1 mx-n1 mb-4" />
-
-                
 
                 <div class="mt-4">
                     <div class="row text-600 text-white bgc-default-tp1 py-25">
                         <div class="d-none d-sm-block col-1">#</div>
                         <div class="col-9 col-sm-5">Title</div>
                         <div class="d-none d-sm-block col-4 col-sm-2">Author</div>
-                        <div class="d-none d-sm-block col-sm-2">Unit Price</div>
-                        <div class="d-none d-sm-block col-sm-2">Unit Price</div>
-                       
+                        <div class="d-none d-sm-block col-sm-2">Publication</div>
+                        <div class="d-none d-sm-block col-sm-2">Page Number</div>
                     </div>
 
                     <div class="text-95 text-secondary-d3">
-                        <div class="row mb-2 mb-sm-0 py-25">
-                            <div class="d-none d-sm-block col-1">1</div>
-                            <div class="col-9 col-sm-5">Domain registration</div>
-                            <div class="d-none d-sm-block col-2">Domain  registration</div>
-                            <div class="d-none d-sm-block col-2 text-95">$10</div>
-                            <div class="col-2 text-secondary-d2">$20</div>
-                        </div>
+                        {this.renderList()}
 
                         <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
                             <div class="d-none d-sm-block col-1">2</div>
