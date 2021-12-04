@@ -3,6 +3,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import './SearchBar.css'
 import { Link } from 'react-router-dom'
 import CloseIcon from "@material-ui/icons/Close";
+import { get_papers_by_author } from '../api/DatabaseQueries';
+import { get_papers_by_publication_years } from '../api/DatabaseQueries';
+import { get_all_papers } from '../api/DatabaseQueries';
 
 export class SearchBar extends React.Component {
 
@@ -20,12 +23,18 @@ export class SearchBar extends React.Component {
             pageNumber: 15,
             year: "",
             journalNumber: ""}
+        ],
+        paper2:[
+
         ]
     }
 
 
 
-    async searchByAuthor(){
+    async componentDidMount(){
+        let papData = await get_all_papers()
+        this.setState({paper2: papData})
+        console.log(this.state.paper2)
 
     }
 
