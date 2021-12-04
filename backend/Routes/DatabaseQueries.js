@@ -142,11 +142,11 @@ async function get_coauthors(first_name, last_name) {
   const coauthor3_papers = await papers.find({ "authors": { $in: coauthor2_ids }});
   const coauthor3_ids = [].concat(coauthor3_papers.toArray().map(a => a.authors));
   let coauthors_3 = [];
-for (var i = 0; i < coauthor3_ids.length; ++i) {
-  var object = await authors.findOne({ "_id": coauthor3_ids[i] }); 
-  coauthors_3.push(object.first_name + ' ' + object.last_name);
-}
-return coauthors_3;
+  for (var i = 0; i < coauthor3_ids.length; ++i) {
+    var object = await authors.findOne({ "_id": coauthor3_ids[i] }); 
+    coauthors_3.push(object.first_name + ' ' + object.last_name);
+  }
+  return coauthors_3;
 }
 
 
