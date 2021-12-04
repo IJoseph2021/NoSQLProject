@@ -2,8 +2,8 @@ import { MongoClient } from 'mongodb';
 import { username, password, cluster_url } from './credentials.js';
 
 
-const uri = `mongodb+srv://${username}:${password}@${cluster_url}`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const uri = encodeURI(`mongodb+srv://${username}:${password}@${cluster_url}`);
+let client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = client.db("DBMFO");
 let authors = db.collection("authors");
 let papers = db.collection("papers");
@@ -88,9 +88,9 @@ async function add_paper(
 
 async function get_all_papers() {
   await client.connect();
-  let documents = await papers.find({});
+  let documents = await papers.find({}).toArray();
   client.close();
-  return documents.toArray();
+  return documents
 }
 
 async function get_paper_by_title(title) {
