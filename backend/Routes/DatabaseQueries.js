@@ -1,7 +1,16 @@
-import { MongoClient } from 'mongodb';
-import { username, password, cluster_url } from './credentials.js';
+//import { MongoClient } from 'mongodb';
+MongoClient = require('mongodb').MongoClient
 
-const uri = encodeURI(`mongodb+srv://${username}:${password}@${cluster_url}`);
+//import { username, password, cluster_url } from './credentials.js';
+
+const username = require('./credentials.js')
+const password = require('./credentials.js')
+const cluster_url = require('./credentials.js')
+
+
+
+const uri = "mongodb+srv://user1:pCtxRghEsDA3JAV@nosqldb.b2v2m.mongodb.net";
+console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = client.db("DBMFO");
 let authors = db.collection("authors");
@@ -53,6 +62,16 @@ async function add_paper(
 ){
   await client.connect();
   let author_ids = [];
+  console.log(title,
+    author_first_names,
+    author_last_names,
+    publication_name,
+    publication_journal,
+    publication_number,
+    publication_year,
+    publication_location,
+    url,
+    page_number)
   for (var i = 0; i < author_first_names.length; i++) {
     var author = await authors.findOne({
       $and: [
@@ -60,8 +79,10 @@ async function add_paper(
         { "last_name" : author_last_names[i]  }
       ]
     });
+    
     if (author) {
       author_ids.push(author._id);
+      
     }
     else {
       return i;
@@ -151,7 +172,7 @@ async function get_coauthors(first_name, last_name) {
 
 
 
-export {get_all_papers, add_author, add_employment_to_author, get_coauthors, get_paper_by_title, get_papers_by_author, get_papers_by_publication_years, add_paper};
+module.exports = {get_all_papers, add_author, add_employment_to_author, get_coauthors, get_paper_by_title, get_papers_by_author, get_papers_by_publication_years, add_paper};
 
 
 
