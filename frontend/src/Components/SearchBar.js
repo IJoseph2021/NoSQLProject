@@ -1,6 +1,7 @@
 import React from 'react'
 import SearchIcon from "@material-ui/icons/Search";
 import './SearchBar.css'
+import { Link } from 'react-router-dom'
 import CloseIcon from "@material-ui/icons/Close";
 
 export class SearchBar extends React.Component {
@@ -23,6 +24,12 @@ export class SearchBar extends React.Component {
     }
 
 
+
+    async searchByAuthor(){
+
+    }
+
+
     renderList(){
         return <>
 				<div className="dataResult">
@@ -35,9 +42,9 @@ export class SearchBar extends React.Component {
                                     {
                                         paper.authors.map((name) => {
                                             return<>
-                                                <a>
-                                                    {name+ ", "}
-                                                </a>
+                                                <p >
+                                                  <Link to={`/viewAuthor/${name}`} > {name+ ", "} </Link>
+                                                </p>
                                             </>
                                         })            
                                     }
@@ -154,14 +161,7 @@ export class SearchBar extends React.Component {
                     <div class="text-95 text-secondary-d3">
                         {this.renderList()}
 
-                        <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
-                            <div class="d-none d-sm-block col-1">2</div>
-                            <div class="col-9 col-sm-5">Web hosting</div>
-                            <div class="d-none d-sm-block col-2">1</div>
-                            <div class="d-none d-sm-block col-2 text-95">$15</div>
-                            <div class="col-2 text-secondary-d2">$15</div>
-                        </div>
-
+                        
                     </div>
 
                     <div class="row border-b-2 brc-default-l2"></div>
