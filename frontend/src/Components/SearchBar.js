@@ -3,9 +3,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import './SearchBar.css'
 import { Link } from 'react-router-dom'
 import CloseIcon from "@material-ui/icons/Close";
-import { get_papers_by_author } from '../api/DatabaseQueries';
-import { get_papers_by_publication_years } from '../api/DatabaseQueries';
-import { get_all_papers } from '../api/DatabaseQueries';
+
 import { AccountRepository } from '../api/accountRepository';
 
 
@@ -38,7 +36,7 @@ export class SearchBar extends React.Component {
     async componentDidMount(){
         let papData = await this.accountRepository.getPapers()
         this.setState({paper2: papData})
-        console.log(this.state.paper2)
+        console.log(papData)
 
     }
 

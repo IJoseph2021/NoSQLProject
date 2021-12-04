@@ -22,9 +22,9 @@ export class AccountRepository {
 		})
 	}
 
-    addAuthors(firstName, lastName) {
+    addAuthors(first, last) {
 		return new Promise((resolve, reject) => {
-			axios.post(hostname + '/authors/add')
+			axios.put(hostname + '/authors/addAuthor', {first, last})
 				.then(response => {
 					resolve(response.data);
 				})
@@ -37,7 +37,7 @@ export class AccountRepository {
 
     getPapers(){
         return new Promise((resolve, reject) => {
-			axios.get(hostname + '/papers/get')
+			axios.get(hostname + '/papers/getPapers')
 				.then(response => {
 					resolve(response.data);
 				})
@@ -47,6 +47,21 @@ export class AccountRepository {
 				});
 		})
     }
+
+	postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url,  page_number){
+		return new Promise((resolve, reject) => {
+			axios.put(hostname + '/papers/addPaper', {title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url,  page_number})
+				.then(response => {
+					resolve(response.data);
+					
+				})
+				.catch(err => {
+					error(err);
+					resolve(undefined);
+				});
+		});
+
+	}
 
 }
 

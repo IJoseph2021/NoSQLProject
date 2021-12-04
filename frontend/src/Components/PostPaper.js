@@ -1,38 +1,36 @@
 import React from 'react'
-
+import { AccountRepository } from '../api/accountRepository';
 
 
 
 export class PostPaper extends React.Component {
 
+    accountRepository = new AccountRepository();
+
     state = {
-        pubVal : "Yes",
+        pubVal : "Conference",
         journalVal: "No",
-        firstName: "",
-        lastName: "",
         url: "",
-        author: [
-            {
-                firstName: "",
-                lastName: "",
-            }
-        ],
+        author_first_name: "",
+        author_last_name: "",
         number: "",
         year: "",
         location: "",
         pageNumber: "",
+        pubName: "",
         submitValBool: false,
         submitVal: "Publish",
-        authorAmount: 0
+        authorAmount: [],
+        title: "",
     }
 
 
     changeButton(){
-        if(this.state.pubVal === "Yes"){
-            this.setState({pubVal: "No"})
+        if(this.state.pubVal === "Conference"){
+            this.setState({pubVal: "Journal"})
         }
         else{
-            this.setState({pubVal: "Yes"})
+            this.setState({pubVal: "Conference"})
         }
     }
 
@@ -46,30 +44,24 @@ export class PostPaper extends React.Component {
     }
 
     condRender(){
-        if(this.state.pubVal === "No"){
+        if(this.state.pubVal === "Conference"){
             return <>
-                <div class="row align-items-center py-3">
-                    <div >
-                        <h6 class="mb-0">Journal</h6>
-                    </div>
-                    <div class="col-md-9 pe-5">
-                        <button type="submit" 
-                            class="btn btn-primary btn-lg" 
-                            onClick={() => this.changeJournal()}>{this.state.journalVal}
-                        </button>
-                    </div>
-                </div>
-            
                 <div class="col-md-9 pe-5">
                     <input type="text" 
                     class="form-control form-control-lg" 
-                    placeholder= "Number"
+                    placeholder= "Conference Name"
+                    onChange={ e => this.setState({pubName: e.target.value}) }/>
+                </div>
+                <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder = "Number of Times Held"
                     onChange={ e => this.setState({number: e.target.value}) }/>
                 </div>
                 <div class="col-md-9 pe-5">
                     <input type="text" 
                     class="form-control form-control-lg" 
-                    placeholder = "Year"
+                    placeholder = "Year Held"
                     onChange={ e => this.setState({year: e.target.value}) }/>
                 </div>
                 <div class="col-md-9 pe-5">
@@ -80,14 +72,56 @@ export class PostPaper extends React.Component {
                 </div>
             </>
         }
+        else{
+            return <>
+                <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder= "Journal Name"
+                    onChange={ e => this.setState({pubName: e.target.value}) }/>
+                </div>
+                <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder = "Volume"
+                    onChange={ e => this.setState({number: e.target.value}) }/>
+                </div>
+                <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder = "Year Held"
+                    onChange={ e => this.setState({year: e.target.value}) }/>
+                </div>
+            </>
+        }
     }
 
     addAuthor(){
-        let x = this.state.authorAmount + 1
-        this.setState({authorAmount: x})
-
+        let x = this.state.authorAmount 
+        x.push(this.state.authorAmount.length + 1)
         
-        for(let i = 0; i<this.state.authorAmount; i++){
+        this.setState({authorAmount: x})
+        console.log(this.state.authorAmount)
+        
+        return <>
+                        
+            {
+                this.state.authorAmount.map((val) => {
+                    console.log("hi" + val)
+                    return<>
+                        <div class="col-md-9 pe-5">
+                        <input type="text" 
+                        class="form-control form-control-lg" 
+                        placeholder = {"Author " + val + " First Name"}
+                        onChange={ e => this.setState({location: e.target.value}) }/>
+                        </div>
+                    </>
+                })            
+            }
+                                
+        </>
+
+        /*for(let i = 0; i<this.state.authorAmount; i++){
             return<>
             <div class="col-md-9 pe-5">
                     <input type="text" 
@@ -103,26 +137,65 @@ export class PostPaper extends React.Component {
                 </div>
 
             </>
-        }
+        }*/
        
     }
 
 
     async postPaper(){
-        console.log(
-            this.state.pubVal,
-            this.state.journalVal,
-            this.state.firstName,
-            this.state.lastName,
-            this.state.url,
-            this.state.author,
-            this.state.number,
-            this.state.year,
-            this.state.location,
-            this.state.pageNumber,
-        )
+
+        let title = this.state.title
+        let author_first_names = [this.state.author_first_name]
+        let author_last_names = [this.state.author_last_name]
+        let publication_name = this.state.pubName
+        let publication_journal = ""
+        if(this.state.pubVal === "Conference"){
+            publication_journal = "Conference"
+        }
+        else{
+            publication_journal = "Journal"
+        }
+        let publication_number = parseInt(this.state.number)
+        let publication_year = parseInt(this.state.year)
+        let publication_location = this.state.location
+        let url = this.state.url
+        let page_number = parseInt(this.state.pageNumber)
+
+        console.log(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
+    
+        await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
+        
+        this.accountRepository.postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
         this.setState({submitValBool: true})
         this.setState({submitVal: "Published"})
+    }
+
+    secondPost(){
+        if(this.state.submitVal!=="Publish"){
+            let title = this.state.title
+            let author_first_names = [this.state.author_first_name]
+            let author_last_names = [this.state.author_last_name]
+            let publication_name = this.state.pubName
+            let publication_journal = ""
+            if(this.state.pubVal === "Conference"){
+                publication_journal = "Conference"
+            }
+            else{
+                publication_journal = "Journal"
+            }
+            let publication_number = parseInt(this.state.number)
+            let publication_year = parseInt(this.state.year)
+            let publication_location = this.state.location
+            let url = this.state.url
+            let page_number = parseInt(this.state.pageNumber)
+
+    
+        
+            
+            
+            this.accountRepository.postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
+            
+        }
     }
 
     render () {
@@ -137,32 +210,17 @@ export class PostPaper extends React.Component {
                             <div class="card-body">
 
 
-                                <div class="row align-items-center pt-4 pb-3">
-                                    <div class="col-md-3 ps-5">
-                                        <h6 class="mb-0">First Name</h6>
-                                    </div>
+                                <div class="row align-items-center py-3">
+                                        <div class="col-md-3 ps-5">
+                                            <h6 class="mb-0">Title</h6>
+                                        </div>
                                     <div class="col-md-9 pe-5">
                                         <input type="text" 
                                         class="form-control form-control-lg" 
-                                        placeholder="First Name"
-                                        onChange={ e => this.setState({firstName: e.target.value}) }/>
+                                        placeholder='Enter Title' 
+                                        onChange={ e => this.setState({title: e.target.value}) }/>
                                     </div>
                                 </div>
-                                <hr class="mx-n3"/>
-
-
-                                <div class="row align-items-center pt-4 pb-3">
-                                    <div class="col-md-3 ps-5">
-                                        <h6 class="mb-0">Last Name</h6>
-                                    </div>
-                                    <div class="col-md-9 pe-5">
-                                        <input type="text" 
-                                        class="form-control form-control-lg" 
-                                        placeholder= "Last Name"
-                                        onChange={ e => this.setState({lastName: e.target.value}) }/>
-                                    </div>
-                                </div>
-                                <hr class="mx-n3"/>
 
 
 
@@ -170,11 +228,18 @@ export class PostPaper extends React.Component {
                                     <div class="col-md-3 ps-5">
                                         <h6 class="mb-0">Author(s)</h6>
                                     </div>
-                                <div class="col-md-9 pe-5">
+                                <div class="col-md-3 pe-1">
                                     <input type="text" 
                                     class="form-control form-control-lg" 
-                                    placeholder='Please enter: "Author1, Author2"..' 
-                                    onChange={ e => this.setState({author: e.target.value}) }/>
+                                    placeholder='Author 1 First Name' 
+                                    onChange={ e => this.setState({author_first_name: e.target.value}) }/>
+                                    <input type="text" 
+                                    class="form-control form-control-lg" 
+                                    placeholder='Author 1 Last Name' 
+                                    onChange={ e => this.setState({author_last_name: e.target.value}) }/>
+                                    
+                                
+                                
                                 </div>
                             </div>
 
@@ -231,6 +296,7 @@ export class PostPaper extends React.Component {
                     {this.state.submitVal}    
                 </button>
             </div>
+            {}
 
           </div>
         </div>
