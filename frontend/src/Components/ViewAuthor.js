@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect, } from 'react'
+import { useParams } from 'react-router-dom'
 
 
-export class ViewAuthor extends React.Component {
-
-    state = {
-       
-    }
-
+export const ViewAuthor = () => {
+    const params = useParams();
+    
+    
 
 
 
@@ -14,12 +13,14 @@ export class ViewAuthor extends React.Component {
 
  
 
-    render () {
-        return <>
+    
+        return (
+            <div>
+                {params.name}
+            </div>
+
+        );
         
-       
-        </>
-    }
 }
 
 
