@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { username, password, cluster_url } from './credentials.js';
 
+
 const uri = `mongodb+srv://${username}:${password}@${cluster_url}`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = client.db("DBMFO");
@@ -148,3 +149,5 @@ async function get_coauthors(first_name, last_name) {
   }, coauthor3_ids);
   return coauthors_3;
 }
+
+export default get_coauthors;
