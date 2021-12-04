@@ -49,7 +49,7 @@ export class SearchBar extends React.Component {
 					{this.state.paper.map((paper) => {
 						return <>
                             <div class="row mb-2 mb-sm-0 py-25">
-                                <div class="d-none d-sm-block col-1">{paper.id}</div>
+                                <div class="d-none d-sm-block col-1">{paper._id}</div>
                                 <div class="col-9 col-sm-5">{paper.title}</div>
                                 <div class="d-none d-sm-block col-2">
                                     {
@@ -115,10 +115,6 @@ export class SearchBar extends React.Component {
 							value={this.state.wordEntered}
 							/*onChange={(e) => this.handleFilter(e)}*/
 						/>
-						<div className="searchIcon btn-primary float btn-lg btn fas fa-search">
-						
-                            <SearchIcon />
-						</div>
 						
 					</div>
 

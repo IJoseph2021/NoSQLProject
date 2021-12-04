@@ -11,13 +11,19 @@ export class PostPaper extends React.Component {
         firstName: "",
         lastName: "",
         url: "",
-        author: "",
+        author: [
+            {
+                firstName: "",
+                lastName: "",
+            }
+        ],
         number: "",
         year: "",
         location: "",
         pageNumber: "",
         submitValBool: false,
-        submitVal: "Publish"
+        submitVal: "Publish",
+        authorAmount: 0
     }
 
 
@@ -74,6 +80,31 @@ export class PostPaper extends React.Component {
                 </div>
             </>
         }
+    }
+
+    addAuthor(){
+        let x = this.state.authorAmount + 1
+        this.setState({authorAmount: x})
+
+        
+        for(let i = 0; i<this.state.authorAmount; i++){
+            return<>
+            <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder = "Location"
+                    onChange={ e => this.setState({location: e.target.value}) }/>
+                </div>
+                <div class="col-md-9 pe-5">
+                    <input type="text" 
+                    class="form-control form-control-lg" 
+                    placeholder = "Location"
+                    onChange={ e => this.setState({location: e.target.value}) }/>
+                </div>
+
+            </>
+        }
+       
     }
 
 
