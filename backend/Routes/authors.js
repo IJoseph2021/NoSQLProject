@@ -1,21 +1,23 @@
 const router = require('express').Router();
 let Author = require('../models/authors.model');
+const { get_coauthors, add_author, add_employment_to_author } = require('./DatabaseQueries');
 
+router.route('/getCoauthors/:first/:last').get((req, res) => {
+  res.send(await get_coauthors(req.params["first"], req.params["last"]));
+});
 
-router.route('/get').get((req, red) => {
-    Author.find()
-        .then(authors => red.json(authors))
-        .catch(err => res.status(400).json('Error: ' + err))
-})
+router.route('/addAuthor').put((req, res) => {
+  res.send(await add_author(req.params["first"], req.params["last"]));
+});
 
-router.route('/add').post((req, res) => {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const newAuthor = new Author({firstName, lastName});
-  
-    newAuthor.save()
-      .then(() => res.json('User added!'))
-      .catch(err => res.status(400).json('Error: ' + err));
-  });
+router.route('/addEmployment/:first/:last').put((req, res) => {
+  res.send(await add_employment_to_author(
+    req.params["first"],
+    req.params["last"],
+    req.body["employment_name"],
+    req.body["employment_start"],
+    req.body["employment_end"]
+  ));
+});
 
-  module.exports = router;
+module.exports = router;
