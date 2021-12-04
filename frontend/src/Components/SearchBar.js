@@ -6,9 +6,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import { get_papers_by_author } from '../api/DatabaseQueries';
 import { get_papers_by_publication_years } from '../api/DatabaseQueries';
 import { get_all_papers } from '../api/DatabaseQueries';
+import { AccountRepository } from '../api/accountRepository';
+
+
 
 export class SearchBar extends React.Component {
 
+    accountRepository = new AccountRepository();
 
     state = {
         reRender: [1,2,3,4,5],
@@ -29,10 +33,10 @@ export class SearchBar extends React.Component {
         ]
     }
 
-
+    
 
     async componentDidMount(){
-        let papData = await get_all_papers()
+        let papData = await this.accountRepository.getPapers()
         this.setState({paper2: papData})
         console.log(this.state.paper2)
 
