@@ -25,7 +25,8 @@ router.route('/getPaper/:publisher/:start/:end').get((req, res) => {
 router.route('/addPaper').put((req, res) => {
   res.send(add_paper(
     req.body["title"],
-    req.body["author_ids"],
+    req.body["author_first_names"],
+    req.body["author_last_names"],
     req.body["publication_name"],
     req.body["publication_journal"],
     req.body["publication_number"],

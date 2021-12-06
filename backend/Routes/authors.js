@@ -17,7 +17,7 @@ router.route('/addEmployment/:first/:last').put((req, res) => {
     req.body["employment_name"],
     req.body["employment_start"],
     req.body["employment_end"]
-  ).then(res=>console.log(res)));
+  ).then(value => {res.send(value)}));
 });
 
 module.exports = router;

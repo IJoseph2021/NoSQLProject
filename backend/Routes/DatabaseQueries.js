@@ -17,25 +17,14 @@ let authors = db.collection("authors");
 let papers = db.collection("papers");
 
 async function add_author(first_name, last_name) {
+  let document = {
+    "first_name": first_name,
+    "last_name": last_name,
+    "employment": []
+  };
   await client.connect();
-  let author = await authors.findOne({
-    $and: [
-      { "first_name": first_name },
-      { "last_name" : last_name  }
-    ]
-  });
-  if (author) {
-    return author._id;
-  }
-  else {
-    let document = {
-      "first_name": first_name,
-      "last_name": last_name,
-      "employment": []
-    };
-    let id = await authors.insertOne(document);
-    return id;
-  }
+  await authors.insertOne(document);
+  ;
 }
 
 async function add_employment_to_author(first_name, last_name, employment_name, employment_start, employment_end){
@@ -61,7 +50,8 @@ async function add_employment_to_author(first_name, last_name, employment_name, 
 
 async function add_paper(
   title,
-  author_ids,
+  author_first_names,
+  author_last_names,
   publication_name,
   publication_journal,
   publication_number,
@@ -71,6 +61,33 @@ async function add_paper(
   page_number
 ){
   await client.connect();
+  let author_ids = [];
+  console.log(title,
+    author_first_names,
+    author_last_names,
+    publication_name,
+    publication_journal,
+    publication_number,
+    publication_year,
+    publication_location,
+    url,
+    page_number)
+  for (var i = 0; i < author_first_names.length; i++) {
+    var author = await authors.findOne({
+      $and: [
+        { "first_name": author_first_names[i] },
+        { "last_name" : author_last_names[i]  }
+      ]
+    });
+    
+    if (author) {
+      author_ids.push(author._id);
+      
+    }
+    else {
+      return i;
+    }
+  }
   let document = {
     "title": title,
     "authors": author_ids,
@@ -85,6 +102,7 @@ async function add_paper(
     "page_number": page_number
   }
   await papers.insertOne(document);
+  return -1;
 }
 
 async function get_all_papers() {
