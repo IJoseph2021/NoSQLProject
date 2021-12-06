@@ -13,6 +13,11 @@ export class PostPaper extends React.Component {
         url: "",
         author_first_name: "",
         author_last_name: "",
+        author2_first_name: "",
+        author2_last_name: "",
+        author3_first_name: "",
+        author3_last_name: "",
+        
         number: "",
         year: "",
         location: "",
@@ -145,8 +150,35 @@ export class PostPaper extends React.Component {
     async postPaper(){
 
         let title = this.state.title
-        let author_first_names = [this.state.author_first_name]
-        let author_last_names = [this.state.author_last_name]
+
+
+        
+        let author_first_names = []
+        let author_last_names = []
+
+
+        if (this.state.author_first_name !== "" && this.state.author_first_name !==""){
+            await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
+            author_first_names.push(this.state.author_first_name)
+            author_last_names.push(this.state.author_last_name)
+        }
+
+        if (this.state.author2_first_name !== "" && this.state.author2_first_name !==""){
+            await this.accountRepository.addAuthors(this.state.author2_first_name, this.state.author2_last_name)
+            author_first_names.push(this.state.author2_first_name)
+            author_last_names.push(this.state.author2_last_name)
+        }
+
+        if (this.state.author3_first_name !== "" && this.state.author3_first_name !==""){
+            await this.accountRepository.addAuthors(this.state.author3_first_name, this.state.author3_last_name)
+            author_first_names.push(this.state.author3_first_name)
+            author_last_names.push(this.state.author3_last_name)
+        }
+
+
+        
+        
+        
         let publication_name = this.state.pubName
         let publication_journal = ""
         if(this.state.pubVal === "Conference"){
@@ -163,7 +195,6 @@ export class PostPaper extends React.Component {
 
         console.log(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
     
-        await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
         
         this.accountRepository.postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
         this.setState({submitValBool: true})
@@ -198,6 +229,11 @@ export class PostPaper extends React.Component {
         }
     }
 
+
+
+
+    
+
     render () {
         return <>
         <div>
@@ -222,7 +258,7 @@ export class PostPaper extends React.Component {
                                     </div>
                                 </div>
 
-
+                                <hr class="mx-n3"/>
 
                                 <div class="row align-items-center py-3">
                                     <div class="col-md-3 ps-5">
@@ -237,6 +273,22 @@ export class PostPaper extends React.Component {
                                     class="form-control form-control-lg" 
                                     placeholder='Author 1 Last Name' 
                                     onChange={ e => this.setState({author_last_name: e.target.value}) }/>
+                                    <input type="text" 
+                                    class="form-control form-control-lg" 
+                                    placeholder='Author 2 First Name' 
+                                    onChange={ e => this.setState({author2_first_name: e.target.value}) }/>
+                                    <input type="text" 
+                                    class="form-control form-control-lg" 
+                                    placeholder='Author 2 Last Name' 
+                                    onChange={ e => this.setState({author2_last_name: e.target.value}) }/>
+                                    <input type="text" 
+                                    class="form-control form-control-lg" 
+                                    placeholder='Author 3 First Name' 
+                                    onChange={ e => this.setState({author3_first_name: e.target.value}) }/>
+                                    <input type="text" 
+                                    class="form-control form-control-lg" 
+                                    placeholder='Author 3 Last Name' 
+                                    onChange={ e => this.setState({author3_last_name: e.target.value}) }/>
                                     
                                 
                                 

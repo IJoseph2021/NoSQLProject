@@ -63,6 +63,48 @@ export class AccountRepository {
 
 	}
 
+	searchByAuthor(first, last){
+		return new Promise((resolve, reject) => {
+			axios.get(hostname + `/papers/getPaper/${first}/${last}`)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		})
+	}
+
+	searchByTitle(title){
+		return new Promise((resolve, reject) => {
+			axios.get(hostname + `/papers/getPaper/${title}`)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		})
+	}
+
+
+	getPapersByAuthor(first, last){
+		return new Promise((resolve, reject) => {
+			axios.get(hostname +`/papers/getPaper/${first}/${last}`)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		})
+	}
+
 }
+
+
 
 export default AccountRepository;
