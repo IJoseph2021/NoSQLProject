@@ -103,6 +103,19 @@ export class AccountRepository {
 		})
 	}
 
+	addEmployment(first, last, employment_name, employment_start, employment_end) {
+		return new Promise((resolve, reject) => {
+			axios.put(hostname + `/authors/addEmployment/${first}/${last}`, {employment_name, employment_start, employment_end})
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					error(err);
+					resolve(undefined);
+				});
+		});
+	}
+
 }
 
 

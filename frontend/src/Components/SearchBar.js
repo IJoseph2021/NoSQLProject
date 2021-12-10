@@ -118,28 +118,17 @@ export class SearchBar extends React.Component {
                             <div class="row mb-2 mb-sm-0 py-25">
                                 
                                 <div class="d-none d-sm-block col-1">{key+1}</div>
-                                <div class="col-9 col-sm-5">
-                                    
-                                <p >
-                                        <Link to={`/viewPaper/`} > {paper.title} 
-                                        {sessionStorage.setItem("paperTitle", paper.Title)}
-                                        {sessionStorage.setItem("paperURL", paper.url)}
-                                        {sessionStorage.setItem("paperPublication", paper.publication.year)}
-                                        {sessionStorage.setItem("paperAuthors", paper.authors)}
-                                        {sessionStorage.setItem("paperNumber", paper.page_number)}
-                                        </Link>
-                                    </p>
+                                    <div class="col-9 col-sm-5">
+                                        <p>
+                                            <Link to={`/viewPaper/${paper.title}`} > {paper.title} </Link>
+                                        </p>
                                     </div>
                                 <div class="d-none d-sm-block col-2">
                                     {
                                         paper.authors.map((name) => {
                                             return<>
                                                 <p >
-                                                    
-                                                  <Link to={{
-                                                      pathname: `/viewAuthor/${this.state.cringeTest}`,
-                                    
-                                                  }}> {name+ ", "} </Link>
+                                                  <Link to={`/viewAuthor/${name}`}> {name+ ", "} </Link>
                                                 </p>
                                             </>
                                         })            
@@ -168,18 +157,10 @@ export class SearchBar extends React.Component {
 						return <>
                             <div class="row mb-2 mb-sm-0 py-25">
                                 <div class="d-none d-sm-block col-1">{key+1}</div>
-                                <div class="col-9 col-sm-5">
-                                    <p >
-                                        <Link to={`/viewPaper/`} > {paper.title} 
-                                        
-                                        
-                                        </Link>
-                                        {sessionStorage.setItem("paperTitle", paper.title)}
-                                        {sessionStorage.setItem("paperURL", paper.url)}
-                                        {sessionStorage.setItem("paperPublication", paper.publication)}
-                                        {sessionStorage.setItem("paperAuthors", paper.authors)}
-                                        {sessionStorage.setItem("paperNumber", paper.page_number)}
-                                    </p>
+                                    <div class="col-9 col-sm-5">
+                                        <p>
+                                            <Link to={`/viewPaper/${paper.title}`} > {paper.title} </Link>
+                                        </p>
                                     </div>
                                 <div class="d-none d-sm-block col-2">
                                     {
@@ -187,7 +168,7 @@ export class SearchBar extends React.Component {
                                             return<>
                                                 <p >
                                                     
-                                                  <Link to={`/viewAuthor/${this.state.cringeTest}`} > {name+ ", "} </Link>
+                                                  <Link to={`/viewAuthor/${name}`}> {name+ ", "} </Link>
                                                 </p>
                                             </>
                                         })            
@@ -307,9 +288,7 @@ export class SearchBar extends React.Component {
                                 <div class="col">
                                 <input type="text" class="form-control" placeholder="Max Year" value={this.state.maxYear} onChange={(e) => this.updateMaxYear(e)}/>
                                 </div>
-                                <div class = "col">
-                                    <button type="submit" className="btn btn-success" onClick={e => this.updateFilter(e)}> Enter </button>
-                                </div>
+                                
                             </div>
                         </form>
                     </span>
