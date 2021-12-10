@@ -116,6 +116,38 @@ export class AccountRepository {
 		});
 	}
 
+
+	getEmployment(first, last){
+		return new Promise((resolve, reject) => {
+			axios.get(hostname +`/authors/getEmployment/${first}/${last}`)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		})
+	}
+
+	getCoAuthors(first, last){
+		return new Promise((resolve, reject) => {
+			axios.get(hostname +`/authors/getCoauthors/${first}/${last}`)
+				.then(response => {
+					resolve(response.data);
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		})
+	}
+
+
+
+
+
+
 }
 
 

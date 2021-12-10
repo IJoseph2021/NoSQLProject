@@ -18,6 +18,7 @@ export class Author extends React.Component {
         employment: [],
         invalidCred: false,
         invalidCredNum: false,
+        coAuthors : []
 
     }
 
@@ -26,6 +27,13 @@ export class Author extends React.Component {
         let papers = await this.accountRepository.getPapersByAuthor(this.state.firstName, this.state.lastName)
         this.setState({ papers })
 
+        let employment  = await this.accountRepository.getEmployment(this.state.firstName, this.state.lastName)
+        this.setState( {employment} )
+        
+
+        let coAuthors = await this.accountRepository.getCoAuthors(this.state.firstName, this.state.lastName)
+        this.setState( {coAuthors} )
+        console.log(this.state.coAuthors)
 
         
     }
@@ -44,9 +52,13 @@ export class Author extends React.Component {
             else{
                 this.setState({invalidCredNum:false})
                 await this.accountRepository.addEmployment(this.state.firstName, this.state.lastName, this.state.employer, this.state.startDate, this.state.endDate)
+                
                 this.setState({employer: "", startDate: "", endDate: ""})
+                this.refreshPage()
             }
+            
         }
+        
         
     }
 
@@ -57,6 +69,10 @@ export class Author extends React.Component {
     validationNum(){
         return !isNaN(this.state.startDate) && !isNaN(this.state.endDate) 
     }
+
+    refreshPage() {
+        window.location.reload(false);
+      }
   
 
 
@@ -78,13 +94,23 @@ export class Author extends React.Component {
                         })}
                 </ul>
                 <h5 class="card-subtitle mb-2 text-muted mt-2">Coauthors: </h5>
+                <ul class="list-group">
+                    {this.state.coAuthors.map((authors, key) => {
+                            return <>
+                                <li class="list-group-item">
+                                    <Link to={`/viewAuthor/${authors}` } > {authors} </Link>                                  
+                                </li>
+                            </>
+                        })}
+                </ul>
                 
                 <h5 class="card-subtitle mb-2 text-muted mt-2">Employment: </h5>
                 <ul class="list-group">
-                    {this.state.papers.map((paper, key) => {
+                    {this.state.employment.map((employer, key) => {
                             return <>
                                 <li class="list-group-item">
-                                    <Link to={`/viewPaper/${paper.title}`} > {paper.title} </Link>
+                                    <p>Employer: {" " + employer.name} </p>
+                                    <p>Dates: {" " + employer.start + "-" + employer.end}</p>
                                 </li>
                             </>
                         })}
@@ -106,7 +132,7 @@ export class Author extends React.Component {
                     </div>
                     </form>
                     <div>
-                            <button type="submit" className="btn btn-success mt-2" onClick={() => this.addEmployment()}> Add Employment </button>
+                            <button type="submit" className="btn btn-primary mt-2" onClick={() => this.addEmployment()}> Add Employment </button>
                     </div>
             </div>
             </div>

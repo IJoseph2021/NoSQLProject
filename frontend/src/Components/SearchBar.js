@@ -109,6 +109,8 @@ export class SearchBar extends React.Component {
         console.log(this.state.dataPassIn)
     }
 
+    
+
     filterRender = () => {
 		if (this.state.filteredData !== 0 && this.state.wordEntered !== '') {
 			return <>
@@ -150,6 +152,8 @@ export class SearchBar extends React.Component {
 				<h3>No Matches!</h3>
 			</>
 		}
+        
+
 		else {
 			return <>
 				<div className="dataResult">
@@ -168,7 +172,7 @@ export class SearchBar extends React.Component {
                                             return<>
                                                 <p >
                                                     
-                                                  <Link to={`/viewAuthor/${name}`}> {name+ ", "} </Link>
+                                                  <Link to={`/viewAuthor/${name}`} > {name+ ", "} </Link>
                                                 </p>
                                             </>
                                         })            

@@ -148,19 +148,19 @@ export class PostPaper extends React.Component {
             let author_last_names = []
 
 
-            if (this.state.author_first_name !== "" && this.state.author_first_name !==""){
+            if (this.state.author_first_name !== "" && this.state.author_last_name !==""){
                 await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
                 author_first_names.push(this.state.author_first_name)
                 author_last_names.push(this.state.author_last_name)
             }
 
-            if (this.state.author2_first_name !== "" && this.state.author2_first_name !==""){
+            if (this.state.author2_first_name !== "" && this.state.author2_last_name !==""){
                 await this.accountRepository.addAuthors(this.state.author2_first_name, this.state.author2_last_name)
                 author_first_names.push(this.state.author2_first_name)
                 author_last_names.push(this.state.author2_last_name)
             }
 
-            if (this.state.author3_first_name !== "" && this.state.author3_first_name !==""){
+            if (this.state.author3_first_name !== "" && this.state.author3_last_name !==""){
                 await this.accountRepository.addAuthors(this.state.author3_first_name, this.state.author3_last_name)
                 author_first_names.push(this.state.author3_first_name)
                 author_last_names.push(this.state.author3_last_name)
