@@ -27,6 +27,8 @@ export class PostPaper extends React.Component {
         submitVal: "Publish",
         authorAmount: [],
         title: "",
+        invalidCred: false,
+        invalidCredNum: false
     }
 
 
@@ -125,80 +127,72 @@ export class PostPaper extends React.Component {
             }
                                 
         </>
-
-        /*for(let i = 0; i<this.state.authorAmount; i++){
-            return<>
-            <div class="col-md-9 pe-5">
-                    <input type="text" 
-                    class="form-control form-control-lg" 
-                    placeholder = "Location"
-                    onChange={ e => this.setState({location: e.target.value}) }/>
-                </div>
-                <div class="col-md-9 pe-5">
-                    <input type="text" 
-                    class="form-control form-control-lg" 
-                    placeholder = "Location"
-                    onChange={ e => this.setState({location: e.target.value}) }/>
-                </div>
-
-            </>
-        }*/
        
     }
 
 
     async postPaper(){
 
-        let title = this.state.title
-
-
-        
-        let author_first_names = []
-        let author_last_names = []
-
-
-        if (this.state.author_first_name !== "" && this.state.author_first_name !==""){
-            await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
-            author_first_names.push(this.state.author_first_name)
-            author_last_names.push(this.state.author_last_name)
-        }
-
-        if (this.state.author2_first_name !== "" && this.state.author2_first_name !==""){
-            await this.accountRepository.addAuthors(this.state.author2_first_name, this.state.author2_last_name)
-            author_first_names.push(this.state.author2_first_name)
-            author_last_names.push(this.state.author2_last_name)
-        }
-
-        if (this.state.author3_first_name !== "" && this.state.author3_first_name !==""){
-            await this.accountRepository.addAuthors(this.state.author3_first_name, this.state.author3_last_name)
-            author_first_names.push(this.state.author3_first_name)
-            author_last_names.push(this.state.author3_last_name)
-        }
-
-
-        
-        
-        
-        let publication_name = this.state.pubName
-        let publication_journal = ""
-        if(this.state.pubVal === "Conference"){
-            publication_journal = "Conference"
+        if(!this.validation()){
+            this.setState({invalidCred: true})
         }
         else{
-            publication_journal = "Journal"
-        }
-        let publication_number = parseInt(this.state.number)
-        let publication_year = parseInt(this.state.year)
-        let publication_location = this.state.location
-        let url = this.state.url
-        let page_number = parseInt(this.state.pageNumber)
+           if(!this.validationNum()){
+                this.setState({invalidCred: false, invalidCredNum:true})
+                
+           }
+           else{
+            this.setState({invalidCred: false, invalidCredNum:false})
+            let title = this.state.title
+            let author_first_names = []
+            let author_last_names = []
 
-        console.log(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
-    
+
+            if (this.state.author_first_name !== "" && this.state.author_first_name !==""){
+                await this.accountRepository.addAuthors(this.state.author_first_name, this.state.author_last_name)
+                author_first_names.push(this.state.author_first_name)
+                author_last_names.push(this.state.author_last_name)
+            }
+
+            if (this.state.author2_first_name !== "" && this.state.author2_first_name !==""){
+                await this.accountRepository.addAuthors(this.state.author2_first_name, this.state.author2_last_name)
+                author_first_names.push(this.state.author2_first_name)
+                author_last_names.push(this.state.author2_last_name)
+            }
+
+            if (this.state.author3_first_name !== "" && this.state.author3_first_name !==""){
+                await this.accountRepository.addAuthors(this.state.author3_first_name, this.state.author3_last_name)
+                author_first_names.push(this.state.author3_first_name)
+                author_last_names.push(this.state.author3_last_name)
+            }
+
+
+            
+            
+            
+            let publication_name = this.state.pubName
+            let publication_journal = ""
+            if(this.state.pubVal === "Conference"){
+                publication_journal = "Conference"
+            }
+            else{
+                publication_journal = "Journal"
+            }
+            let publication_number = parseInt(this.state.number)
+            let publication_year = parseInt(this.state.year)
+            let publication_location = this.state.location
+            let url = this.state.url
+            let page_number = parseInt(this.state.pageNumber)
+
+            console.log(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
         
-        this.accountRepository.postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
-        this.setState({submitValBool: true})
-        this.setState({submitVal: "Published"})
+            
+            this.accountRepository.postPaper(title, author_first_names, author_last_names, publication_name, publication_journal, publication_number, publication_year, publication_location, url, page_number)
+            this.setState({submitValBool: true})
+            this.setState({submitVal: "Published"})
+           }
+        }
+
     }
 
     secondPost(){
@@ -230,7 +224,19 @@ export class PostPaper extends React.Component {
     }
 
 
+    validation(){
+		if(this.state.pubVal === "Conference"){
+            return this.state.url.length > 0 && this.state.author_first_name.length > 0 && this.state.author_last_name.length > 0 && this.state.number.length > 0 && this.state.year.length > 0 && this.state.location.length > 0 && this.state.pageNumber.length > 0 && this.state.pubName.length > 0 && this.state.title.length > 0
+            
+        }
+        else{
+            return this.state.url.length > 0 && this.state.author_first_name.length > 0 && this.state.author_last_name.length > 0 && this.state.number.length > 0 && this.state.year.length > 0 && this.state.pageNumber.length > 0 && this.state.pubName.length > 0 && this.state.title.length > 0
+        }
+	}
 
+    validationNum(){
+        return !isNaN(this.state.number) && !isNaN(this.state.year) && !isNaN(this.state.pageNumber)
+    }
 
     
 
@@ -242,6 +248,8 @@ export class PostPaper extends React.Component {
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-xl-9">
                         <h1 class="mb-4">Post Paper</h1>
+                        {this.state.invalidCred && <p className="form-control is-invalid"> Fill Out All Inputs! You Need at Least 1 Author</p>}
+                        {this.state.invalidCredNum && <p className="form-control is-invalid"> Publication Number, Year Held, and Page Number Need to be Numbers</p>}
                         <div class="card">
                             <div class="card-body">
 
