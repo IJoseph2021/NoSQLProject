@@ -21,12 +21,15 @@ export class SearchBar extends React.Component {
         yearFilter: false,
         placeholder: "Enter Paper title",
         dataPassIn: [],
-        cringeTest : "yieks"
+        cringeTest : "yieks",
+        minYear: "",
+        maxYear: "",
+
     }
 
 
     handleFilter = (event) => {
-		const searchWord = event.target.value;
+		const searchWord = event;
 		this.setState({ wordEntered: searchWord })
 		const newFilter = this.state.data.filter((value) => {
 			if (this.state.paperFilter === true) {
@@ -36,13 +39,36 @@ export class SearchBar extends React.Component {
                 let temp = ""
                 for (let i =0;i<value.authors.length;i++){
                     temp = temp + value.authors[i]
-                    console.log(temp)
+                    
                 }
                 return temp.toLowerCase().includes(searchWord.toLowerCase());
 				//return value.authors.toLowerCase().includes(searchWord.toLowerCase());
 			}
             else {
-                return value.publication.journal.toLowerCase().includes(searchWord.toLowerCase());
+                
+                    if(this.state.minYear !== "" && this.state.maxYear === ""){
+                        
+                        console.log(value.publication.year, this.state.minYear)
+                        if(value.publication.year >= parseInt(this.state.minYear)){
+                            return value.publication.journal.toLowerCase().includes(searchWord.toLowerCase())
+                        }
+                    }
+                    else if(this.state.minYear === "" && this.state.maxYear !== ""){
+                        if(value.publication.year <= parseInt(this.state.maxYear)){
+                            return value.publication.journal.toLowerCase().includes(searchWord.toLowerCase())
+                        }
+                    }
+                    else if(this.state.minYear !== "" && this.state.maxYear !== ""){
+                        if(value.publication.year <= parseInt(this.state.maxYear) && value.publication.year >= parseInt(this.state.minYear)){
+                            return value.publication.journal.toLowerCase().includes(searchWord.toLowerCase())
+                        }
+                    }
+                    else{
+                        
+                        return value.publication.journal.toLowerCase().includes(searchWord.toLowerCase())
+                    }
+                
+                  
             }
 		});
 
@@ -65,6 +91,7 @@ export class SearchBar extends React.Component {
 		}
         else{
             this.setState({ authorFilter: false, paperFilter: false, yearFilter: true, placeholder: 'Enter Publication Name' })
+            
         }
 
 
@@ -119,7 +146,7 @@ export class SearchBar extends React.Component {
                                     }
                                 </div>
                                 <div class="d-none d-sm-block col-2 text-95">{paper.publication.journal} <h6>{paper.publication.name}</h6></div>
-                                <div class="col-2 text-secondary-d2">{paper.page_Number}</div>
+                                <div class="col-2 text-secondary-d2">{paper.publication.year}</div>
                                 
                             </div>
                             
@@ -182,7 +209,24 @@ export class SearchBar extends React.Component {
     async componentDidMount(){
         let data = await this.accountRepository.getPapers()
         this.setState({ data })
-        console.log(data)
+        
+    }
+
+    async updateMinYear(event){
+        console.log("test2")
+        this.setState({minYear:event.target.value}, function(){
+            this.handleFilter(this.state.wordEntered)
+        })
+        
+        
+    }
+
+    async updateMaxYear(event){
+        console.log("test3")
+        this.setState({maxYear:event.target.value}, function(){
+            this.handleFilter(this.state.wordEntered)
+        })
+        
     }
 
 
@@ -228,7 +272,7 @@ export class SearchBar extends React.Component {
 							placeholder={this.state.placeholder}
 							value={this.state.wordEntered}
                             
-							onChange={(e) => this.handleFilter(e)}
+							onChange={(e) => this.handleFilter(e.target.value)}
                             
 						/>
 						
@@ -239,7 +283,7 @@ export class SearchBar extends React.Component {
 
 
 					<label for="membership" className="mt-4 me-2"><span>Search by:</span></label>
-					<div>
+					<span>
 						<select className="form-select form-control mt-3" name="membership" id="membership"onChange={(e) => this.changeFilter(e)} >
 							<option
 								value="paperFilter"
@@ -253,7 +297,23 @@ export class SearchBar extends React.Component {
                             </option>
 						</select>
 
-					</div>
+					</span>
+                    <span>
+                        <form>
+                            <div class="row -lg-3 mb-2 mt-3 mx-auto">
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Min Year" value={this.state.minYear} onChange={(e) => this.updateMinYear(e)}/>
+                                </div>
+                                <div class="col">
+                                <input type="text" class="form-control" placeholder="Max Year" value={this.state.maxYear} onChange={(e) => this.updateMaxYear(e)}/>
+                                </div>
+                                <div class = "col">
+                                    <button type="submit" className="btn btn-success" onClick={e => this.updateFilter(e)}> Enter </button>
+                                </div>
+                            </div>
+                        </form>
+                    </span>
+                    
 				</div>
 				<hr />
 				<div>
