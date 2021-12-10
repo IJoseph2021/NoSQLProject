@@ -48,6 +48,18 @@ async function add_employment_to_author(first_name, last_name, employment_name, 
   ;
 }
 
+async function get_employment_by_author(first_name, last_name) {
+  let query = {
+    $and: [
+      { "first_name": first_name },
+      { "last_name":  last_name  }
+    ]
+  };
+  await client.connect();
+  let author = await authors.findOne(query);
+  return author.employment;
+}
+
 async function add_paper(
   title,
   author_first_names,
@@ -176,14 +188,14 @@ async function get_coauthors(first_name, last_name) {
       { "last_name" : last_name  }
     ]
   });
-  const coauthor0_papers = await papers.find({ "authors": author._id }).toArray();
-  const coauthor0_ids = [].concat(coauthor0_papers.map(a => a.authors));
-  const coauthor1_papers = await papers.find({ "authors": { $in: coauthor0_ids }}).toArray();
-  const coauthor1_ids = [].concat(coauthor1_papers.map(a => a.authors));
-  const coauthor2_papers = await papers.find({ "authors": { $in: coauthor1_ids }}).toArray();
-  const coauthor2_ids = [].concat(coauthor2_papers.map(a => a.authors));
-  const coauthor3_papers = await papers.find({ "authors": { $in: coauthor2_ids }}).toArray();
-  const coauthor3_ids = [].concat(coauthor3_papers.map(a => a.authors));
+  const coauthor0_papers = await papers.find({ "authors": author._id });
+  const coauthor0_ids = [].concat(coauthor0_papers.toArray().map(a => a.authors));
+  const coauthor1_papers = await papers.find({ "authors": { $in: coauthor0_ids }});
+  const coauthor1_ids = [].concat(coauthor1_papers.toArray().map(a => a.authors));
+  const coauthor2_papers = await papers.find({ "authors": { $in: coauthor1_ids }});
+  const coauthor2_ids = [].concat(coauthor2_papers.toArray().map(a => a.authors));
+  const coauthor3_papers = await papers.find({ "authors": { $in: coauthor2_ids }});
+  const coauthor3_ids = [].concat(coauthor3_papers.toArray().map(a => a.authors));
   let coauthors_3 = [];
   for (var i = 0; i < coauthor3_ids.length; ++i) {
     var object = await authors.findOne({ "_id": coauthor3_ids[i] }); 
