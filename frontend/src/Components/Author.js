@@ -15,7 +15,9 @@ export class Author extends React.Component {
         employer: "",
         startDate: "",
         endDate: "",
-        employment: []
+        employment: [],
+        invalidCred: false,
+        invalidCredNum: false,
 
     }
 
@@ -23,21 +25,45 @@ export class Author extends React.Component {
     async componentDidMount(){
         let papers = await this.accountRepository.getPapersByAuthor(this.state.firstName, this.state.lastName)
         this.setState({ papers })
-        
+
 
         
     }
 
     async addEmployment(){
-        await this.accountRepository.addEmployment(this.state.firstName, this.state.lastName, this.state.employer, this.state.startDate, this.state.endDate)
-        this.setState({employer: "", startDate: "", endDate: ""})
+        if(!this.validation()){
+            
+            this.setState({invalidCred:true})
+            
+        }
+        else{
+            
+            if(!this.validationNum()){
+                this.setState({invalidCred:false, invalidCredNum:true})
+            }
+            else{
+                this.setState({invalidCredNum:false})
+                await this.accountRepository.addEmployment(this.state.firstName, this.state.lastName, this.state.employer, this.state.startDate, this.state.endDate)
+                this.setState({employer: "", startDate: "", endDate: ""})
+            }
+        }
+        
     }
 
+    validation(){
+		return this.state.employer.length > 0 && this.state.startDate.length > 0 && this.state.endDate.length > 0
+	}
+
+    validationNum(){
+        return !isNaN(this.state.startDate) && !isNaN(this.state.endDate) 
+    }
   
 
 
     render () {
         return <>
+        {this.state.invalidCred && <p className="form-control is-invalid"> Fill Out All Inputs!</p>}
+        {this.state.invalidCredNum && <p className="form-control is-invalid"> Start and End Date Need to be Numbers</p>}
         <div class="card" styles="width: 18rem;">
             <div class="card-body">
                 <h2 class="card-title">{this.state.firstName + " " + this.state.lastName}</h2>
@@ -52,6 +78,7 @@ export class Author extends React.Component {
                         })}
                 </ul>
                 <h5 class="card-subtitle mb-2 text-muted mt-2">Coauthors: </h5>
+                
                 <h5 class="card-subtitle mb-2 text-muted mt-2">Employment: </h5>
                 <ul class="list-group">
                     {this.state.papers.map((paper, key) => {
@@ -75,11 +102,12 @@ export class Author extends React.Component {
                         <div class="col">
                         <input type="text" class="form-control" placeholder="End Date" value={this.state.endDate} onChange={e => this.setState({ endDate: e.target.value })}/>
                         </div>
-                        <div>
-                            <button type="submit" className="btn btn-success mt-2" onClick={e => this.addEmployment(e)}> Add Employment </button>
-                        </div>
+                        
                     </div>
                     </form>
+                    <div>
+                            <button type="submit" className="btn btn-success mt-2" onClick={() => this.addEmployment()}> Add Employment </button>
+                    </div>
             </div>
             </div>
         
