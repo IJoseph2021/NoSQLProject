@@ -3,10 +3,13 @@ MongoClient = require('mongodb').MongoClient
 
 //import { username, password, cluster_url } from './credentials.js';
 
-const username = require('./credentials.js')
-const password = require('./credentials.js')
-const cluster_url = require('./credentials.js')
+//const username = require('./credentials.js')
+//const password = require('./credentials.js')
+//const cluster_url = require('./credentials.js')
 
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
 
 
 const uri = "mongodb+srv://user1:pCtxRghEsDA3JAV@nosqldb.b2v2m.mongodb.net";
@@ -182,32 +185,28 @@ async function get_papers_by_publication_years(publisher, range_start, range_end
 
 async function get_coauthors(first_name, last_name) {
   await client.connect();
-  const author = await papers.findOne({
+  const author = await authors.findOne({
     $and: [
       { "first_name": first_name },
       { "last_name" : last_name  }
     ]
   });
-  const coauthor0_papers = await papers.find({ "authors": author._id });
-  const coauthor0_ids = [].concat(coauthor0_papers.toArray().map(a => a.authors));
-  const coauthor1_papers = await papers.find({ "authors": { $in: coauthor0_ids }});
-  const coauthor1_ids = [].concat(coauthor1_papers.toArray().map(a => a.authors));
-  const coauthor2_papers = await papers.find({ "authors": { $in: coauthor1_ids }});
-  const coauthor2_ids = [].concat(coauthor2_papers.toArray().map(a => a.authors));
-  const coauthor3_papers = await papers.find({ "authors": { $in: coauthor2_ids }});
-  const coauthor3_ids = [].concat(coauthor3_papers.toArray().map(a => a.authors));
+  const coauthor0_papers = await papers.find({ "authors": author._id }).toArray();
+  const coauthor0_ids = coauthor0_papers.map(a => a.authors).flat().filter(onlyUnique);
+  const coauthor1_papers = await papers.find({ "authors": { $in: coauthor0_ids }}).toArray();
+  const coauthor1_ids = coauthor1_papers.map(a => a.authors).flat().filter(onlyUnique);
+  const coauthor2_papers = await papers.find({ "authors": { $in: coauthor1_ids }}).toArray();
+  const coauthor2_ids = coauthor2_papers.map(a => a.authors).flat().filter(onlyUnique);
+  const coauthor3_papers = await papers.find({ "authors": { $in: coauthor2_ids }}).toArray();
+  const coauthor3_ids = coauthor3_papers.map(a => a.authors).flat().filter(onlyUnique);
   let coauthors_3 = [];
   for (var i = 0; i < coauthor3_ids.length; ++i) {
     var object = await authors.findOne({ "_id": coauthor3_ids[i] }); 
     coauthors_3.push(object.first_name + ' ' + object.last_name);
   }
-  return coauthors_3;
+  return coauthors_3.filter(onlyUnique);
 }
 
-
+get_coauthors("Billy", "Bob").then(res => console.log(res));
 
 module.exports = {get_all_papers, add_author, add_employment_to_author, get_coauthors, get_paper_by_title, get_papers_by_author, get_papers_by_publication_years, add_paper};
-
-
-
-//console.log(await get_all_papers());
