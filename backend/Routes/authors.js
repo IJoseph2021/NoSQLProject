@@ -3,7 +3,7 @@ let Author = require('../models/authors.model');
 const { get_coauthors, add_author, add_employment_to_author } = require('./DatabaseQueries');
 
 router.route('/getCoauthors/:first/:last').get((req, res) => {
-  res.send(get_coauthors(req.params["first"], req.params["last"]).then(res=>console.log(res)));
+  get_coauthors(req.params["first"], req.params["last"]).then(value => {res.send(value)})
 });
 
 router.route('/addAuthor').put((req, res) => {

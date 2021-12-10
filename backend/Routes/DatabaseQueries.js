@@ -207,6 +207,6 @@ async function get_coauthors(first_name, last_name) {
   return coauthors_3.filter(onlyUnique);
 }
 
-get_coauthors("Billy", "Bob").then(res => console.log(res));
+//get_coauthors("Billy", "Bob").then(res => console.log(res));
 
 module.exports = {get_all_papers, add_author, add_employment_to_author, get_coauthors, get_paper_by_title, get_papers_by_author, get_papers_by_publication_years, add_paper};
